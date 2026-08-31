@@ -1,0 +1,1134 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Payment - Velora Coffee</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+/* ================================
+   PAYMENT PAGE
+================================ */
+
+.payment{
+    width:90%;
+    max-width:850px;
+    margin:50px auto;
+    background:#fff;
+    padding:35px;
+    border-radius:18px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.12);
+}
+
+.payment h1{
+    text-align:center;
+    color:#6f4e37;
+    margin-bottom:30px;
+}
+
+.payment-box{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:18px;
+    margin:15px 0;
+    border:2px solid #ddd;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:18px;
+    transition:0.3s;
+}
+
+.payment-box:hover{
+    border-color:#6f4e37;
+    background:#fffaf6;
+}
+
+.payment-box.active{
+    border-color:#6f4e37;
+    background:#f8eee7;
+}
+
+.payment-box input{
+    width:18px;
+    height:18px;
+    accent-color:#6f4e37;
+}
+
+.payment-box i{
+    font-size:25px;
+    color:#6f4e37;
+    width:30px;
+}
+
+/* ================================
+   DETAILS
+================================ */
+
+.details{
+    display:none;
+    margin:20px 0;
+    padding:22px;
+    background:#faf7f4;
+    border:1px solid #ddd;
+    border-radius:12px;
+}
+
+.details.show{
+    display:block;
+}
+
+.details h3{
+    color:#6f4e37;
+    margin-bottom:18px;
+}
+
+.details input{
+    width:100%;
+    padding:13px;
+    margin:8px 0;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:15px;
+    outline:none;
+}
+
+.details input:focus{
+    border-color:#6f4e37;
+}
+
+.row{
+    display:flex;
+    gap:12px;
+}
+
+.row input{
+    width:50%;
+}
+
+/* ================================
+   MESSAGE
+================================ */
+
+.cod-message{
+    padding:18px;
+    background:#edf8ea;
+    border:1px solid #b7d9ae;
+    color:#37642c;
+    border-radius:10px;
+    line-height:25px;
+}
+
+.upi-message{
+    color:#555;
+    font-size:14px;
+    margin-bottom:10px;
+}
+
+/* ================================
+   BUTTON
+================================ */
+
+.pay-btn{
+    width:100%;
+    padding:15px;
+    margin-top:20px;
+    background:#6f4e37;
+    color:#fff;
+    border:none;
+    border-radius:9px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.pay-btn:hover{
+    background:#4b3125;
+}
+
+.pay-btn:disabled{
+    background:#aaa;
+    cursor:not-allowed;
+}
+
+/* ================================
+   POPUP
+================================ */
+
+.payment-popup{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.65);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.payment-popup.show{
+    display:flex;
+}
+
+.popup-box{
+    width:90%;
+    max-width:450px;
+    background:white;
+    border-radius:18px;
+    padding:35px;
+    text-align:center;
+    animation:popup 0.3s ease;
+}
+
+@keyframes popup{
+
+    from{
+        transform:scale(0.7);
+        opacity:0;
+    }
+
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+
+}
+
+.loader{
+    width:55px;
+    height:55px;
+    border:5px solid #eee;
+    border-top:5px solid #6f4e37;
+    border-radius:50%;
+    margin:0 auto 20px;
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+.success-icon{
+    width:70px;
+    height:70px;
+    background:#28a745;
+    color:white;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 20px;
+    font-size:40px;
+}
+
+.popup-box h2{
+    color:#6f4e37;
+    margin-bottom:12px;
+}
+
+.popup-box p{
+    color:#666;
+    line-height:25px;
+}
+
+.order-id{
+    margin:18px 0;
+    padding:12px;
+    background:#f5f2ef;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.track-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:8px;
+    background:#6f4e37;
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.track-btn:hover{
+    background:#4b3125;
+}
+
+/* ================================
+   MOBILE
+================================ */
+
+@media(max-width:600px){
+
+    .payment{
+        width:94%;
+        padding:22px;
+        margin:25px auto;
+    }
+
+    .payment h1{
+        font-size:26px;
+    }
+
+    .payment-box{
+        font-size:15px;
+    }
+
+    .row{
+        flex-direction:column;
+        gap:0;
+    }
+
+    .row input{
+        width:100%;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================================
+     HEADER
+================================ -->
+
+<header class="header">
+
+    <div class="logo">
+
+        <img src="images/logo.png">
+
+        <h2>Velora Coffee</h2>
+
+    </div>
+
+
+    <nav>
+
+        <a href="home.html">Home</a>
+
+        <a href="menu.html">Menu</a>
+
+        <a href="cart.html">Cart</a>
+
+    </nav>
+
+</header>
+
+
+
+<!-- ================================
+     PAYMENT
+================================ -->
+
+<section class="payment">
+
+    <h1>Select Payment Method</h1>
+
+
+    <form id="paymentForm">
+
+
+        <!-- CASH ON DELIVERY -->
+
+        <label class="payment-box" id="codBox">
+
+            <input
+                type="radio"
+                name="payment"
+                value="Cash on Delivery"
+                id="cod"
+            >
+
+            <i class="fa-solid fa-money-bill-wave"></i>
+
+            <span>
+                Cash on Delivery
+            </span>
+
+        </label>
+
+
+        <!-- COD DETAILS -->
+
+        <div class="details" id="codDetails">
+
+            <h3>
+                <i class="fa-solid fa-money-bill-wave"></i>
+                Cash on Delivery
+            </h3>
+
+            <div class="cod-message">
+
+                <strong>
+                    Cash on Delivery Selected ✓
+                </strong>
+
+                <br>
+
+                You can pay the order amount in cash
+                when your Velora Coffee order is delivered
+                to your doorstep.
+
+                <br><br>
+
+                Please keep the exact amount ready
+                for the delivery partner.
+
+            </div>
+
+        </div>
+
+
+
+        <!-- UPI -->
+
+        <label class="payment-box" id="upiBox">
+
+            <input
+                type="radio"
+                name="payment"
+                value="UPI"
+                id="upi"
+            >
+
+            <i class="fa-brands fa-google-pay"></i>
+
+            <span>
+                UPI Payment
+            </span>
+
+        </label>
+
+
+        <!-- UPI DETAILS -->
+
+        <div class="details" id="upiDetails">
+
+            <h3>
+                <i class="fa-solid fa-mobile-screen-button"></i>
+                Enter UPI Details
+            </h3>
+
+            <p class="upi-message">
+
+                Enter your UPI ID to continue.
+                Example: yourname@upi
+
+            </p>
+
+            <input
+                type="text"
+                id="upiId"
+                placeholder="Enter UPI ID"
+                autocomplete="off"
+            >
+
+        </div>
+
+
+
+        <!-- CARD -->
+
+        <label class="payment-box" id="cardBox">
+
+            <input
+                type="radio"
+                name="payment"
+                value="Credit / Debit Card"
+                id="card"
+            >
+
+            <i class="fa-solid fa-credit-card"></i>
+
+            <span>
+                Credit / Debit Card
+            </span>
+
+        </label>
+
+
+        <!-- CARD DETAILS -->
+
+        <div class="details" id="cardDetails">
+
+            <h3>
+                <i class="fa-solid fa-credit-card"></i>
+                Enter Card Details
+            </h3>
+
+
+            <input
+                type="text"
+                id="cardName"
+                placeholder="Card Holder Name"
+                autocomplete="off"
+            >
+
+
+            <input
+                type="text"
+                id="cardNumber"
+                placeholder="Card Number"
+                maxlength="19"
+                inputmode="numeric"
+                autocomplete="off"
+            >
+
+
+            <div class="row">
+
+                <input
+                    type="text"
+                    id="expiry"
+                    placeholder="MM/YY"
+                    maxlength="5"
+                    inputmode="numeric"
+                    autocomplete="off"
+                >
+
+                <input
+                    type="password"
+                    id="cvv"
+                    placeholder="CVV"
+                    maxlength="3"
+                    inputmode="numeric"
+                    autocomplete="off"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- BUTTON -->
+
+        <button
+            type="submit"
+            class="pay-btn"
+            id="payButton"
+        >
+            Select Payment Method
+        </button>
+
+
+    </form>
+
+</section>
+
+
+
+<!-- ================================
+     PAYMENT POPUP
+================================ -->
+
+<div class="payment-popup" id="paymentPopup">
+
+    <div class="popup-box" id="popupContent">
+
+        <!-- JavaScript content -->
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+/* ==========================================
+   VARIABLES
+========================================== */
+
+const paymentForm =
+    document.getElementById("paymentForm");
+
+const payButton =
+    document.getElementById("payButton");
+
+const cod =
+    document.getElementById("cod");
+
+const upi =
+    document.getElementById("upi");
+
+const card =
+    document.getElementById("card");
+
+const codDetails =
+    document.getElementById("codDetails");
+
+const upiDetails =
+    document.getElementById("upiDetails");
+
+const cardDetails =
+    document.getElementById("cardDetails");
+
+
+
+/* ==========================================
+   PAYMENT METHOD CHANGE
+========================================== */
+
+document.querySelectorAll(
+    'input[name="payment"]'
+).forEach(function(radio){
+
+    radio.addEventListener("change",function(){
+
+        /* Hide all */
+
+        codDetails.classList.remove("show");
+        upiDetails.classList.remove("show");
+        cardDetails.classList.remove("show");
+
+
+        /* Remove active */
+
+        document.getElementById("codBox")
+            .classList.remove("active");
+
+        document.getElementById("upiBox")
+            .classList.remove("active");
+
+        document.getElementById("cardBox")
+            .classList.remove("active");
+
+
+        /* COD */
+
+        if(this.value === "Cash on Delivery"){
+
+            codDetails.classList.add("show");
+
+            document.getElementById("codBox")
+                .classList.add("active");
+
+            payButton.innerText =
+                "Place Order";
+
+        }
+
+
+        /* UPI */
+
+        if(this.value === "UPI"){
+
+            upiDetails.classList.add("show");
+
+            document.getElementById("upiBox")
+                .classList.add("active");
+
+            payButton.innerText =
+                "Pay with UPI";
+
+        }
+
+
+        /* CARD */
+
+        if(this.value === "Credit / Debit Card"){
+
+            cardDetails.classList.add("show");
+
+            document.getElementById("cardBox")
+                .classList.add("active");
+
+            payButton.innerText =
+                "Pay Now";
+
+        }
+
+    });
+
+});
+
+
+
+/* ==========================================
+   CARD NUMBER FORMAT
+========================================== */
+
+document.getElementById("cardNumber")
+.addEventListener("input",function(){
+
+    let value =
+        this.value.replace(/\D/g,"");
+
+    value =
+        value.substring(0,16);
+
+    let result =
+        value.match(/.{1,4}/g);
+
+    this.value =
+        result ? result.join(" ") : "";
+
+});
+
+
+
+/* ==========================================
+   EXPIRY FORMAT
+========================================== */
+
+document.getElementById("expiry")
+.addEventListener("input",function(){
+
+    let value =
+        this.value.replace(/\D/g,"");
+
+    value =
+        value.substring(0,4);
+
+    if(value.length >= 3){
+
+        value =
+            value.substring(0,2)
+            + "/"
+            + value.substring(2);
+
+    }
+
+    this.value = value;
+
+});
+
+
+
+/* ==========================================
+   CVV NUMBERS ONLY
+========================================== */
+
+document.getElementById("cvv")
+.addEventListener("input",function(){
+
+    this.value =
+        this.value.replace(/\D/g,"");
+
+});
+
+
+
+/* ==========================================
+   UPI VALIDATION
+========================================== */
+
+function validateUPI(){
+
+    let upiId =
+        document.getElementById("upiId")
+        .value
+        .trim();
+
+    let pattern =
+        /^[a-zA-Z0-9._-]+@[a-zA-Z]{2,}$/;
+
+    if(!pattern.test(upiId)){
+
+        alert(
+            "Please enter a valid UPI ID.\nExample: yourname@upi"
+        );
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
+
+
+/* ==========================================
+   CARD VALIDATION
+========================================== */
+
+function validateCard(){
+
+    let name =
+        document.getElementById("cardName")
+        .value.trim();
+
+    let number =
+        document.getElementById("cardNumber")
+        .value
+        .replace(/\s/g,"");
+
+    let expiry =
+        document.getElementById("expiry")
+        .value.trim();
+
+    let cvv =
+        document.getElementById("cvv")
+        .value.trim();
+
+
+    if(name.length < 3){
+
+        alert("Please enter card holder name.");
+
+        return false;
+
+    }
+
+
+    if(!/^\d{16}$/.test(number)){
+
+        alert(
+            "Please enter a valid 16-digit card number."
+        );
+
+        return false;
+
+    }
+
+
+    if(!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)){
+
+        alert(
+            "Please enter expiry date in MM/YY format."
+        );
+
+        return false;
+
+    }
+
+
+    if(!/^\d{3}$/.test(cvv)){
+
+        alert(
+            "Please enter a valid 3-digit CVV."
+        );
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+
+/* ==========================================
+   GENERATE ORDER ID
+========================================== */
+
+function generateOrderID(){
+
+    let number =
+        Math.floor(
+            100000 +
+            Math.random() * 900000
+        );
+
+    return "VC" + number;
+
+}
+
+
+
+/* ==========================================
+   PAYMENT SUBMIT
+========================================== */
+
+paymentForm.addEventListener(
+    "submit",
+    function(e){
+
+        e.preventDefault();
+
+
+        let selected =
+            document.querySelector(
+                'input[name="payment"]:checked'
+            );
+
+
+        /* No payment selected */
+
+        if(!selected){
+
+            alert(
+                "Please select a payment method."
+            );
+
+            return;
+
+        }
+
+
+        let method =
+            selected.value;
+
+
+        /* ==========================
+           COD
+        ========================== */
+
+        if(method === "Cash on Delivery"){
+
+            completeOrder(method);
+
+            return;
+
+        }
+
+
+        /* ==========================
+           UPI
+        ========================== */
+
+        if(method === "UPI"){
+
+            if(!validateUPI()){
+
+                return;
+
+            }
+
+            processPayment(method);
+
+            return;
+
+        }
+
+
+        /* ==========================
+           CARD
+        ========================== */
+
+        if(method === "Credit / Debit Card"){
+
+            if(!validateCard()){
+
+                return;
+
+            }
+
+            processPayment(method);
+
+            return;
+
+        }
+
+    }
+);
+
+
+
+/* ==========================================
+   PROCESS ONLINE PAYMENT
+========================================== */
+
+function processPayment(method){
+
+    let popup =
+        document.getElementById("paymentPopup");
+
+    let content =
+        document.getElementById("popupContent");
+
+
+    popup.classList.add("show");
+
+
+    content.innerHTML = `
+
+        <div class="loader"></div>
+
+        <h2>
+            Processing Payment...
+        </h2>
+
+        <p>
+            Please wait while we process
+            your payment securely.
+        </p>
+
+    `;
+
+
+    /* Simulated payment processing */
+
+    setTimeout(function(){
+
+        completeOrder(method);
+
+    },3000);
+
+}
+
+
+
+/* ==========================================
+   COMPLETE ORDER
+========================================== */
+
+function completeOrder(method){
+
+    let order =
+        JSON.parse(
+            localStorage.getItem("orderDetails")
+        ) || {};
+
+
+    /* Generate order ID */
+
+    let orderID =
+        generateOrderID();
+
+
+    /* Save payment details */
+
+    localStorage.setItem(
+        "paymentMethod",
+        method
+    );
+
+
+    localStorage.setItem(
+        "orderID",
+        orderID
+    );
+
+
+    /* Save payment status */
+
+    localStorage.setItem(
+        "paymentStatus",
+        "Payment Successful"
+    );
+
+
+    /* Save complete order */
+
+    order.orderID = orderID;
+
+    order.paymentMethod = method;
+
+    order.paymentStatus =
+        method === "Cash on Delivery"
+        ? "Cash on Delivery"
+        : "Payment Successful";
+
+
+    localStorage.setItem(
+        "orderDetails",
+        JSON.stringify(order)
+    );
+
+
+    /* Remove cart after successful order */
+
+    localStorage.removeItem("cart");
+
+
+    /* Show success */
+
+    let popup =
+        document.getElementById("paymentPopup");
+
+    let content =
+        document.getElementById("popupContent");
+
+
+    popup.classList.add("show");
+
+
+    content.innerHTML = `
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+        <h2>
+            ${
+                method === "Cash on Delivery"
+                ? "Order Confirmed!"
+                : "Payment Successful!"
+            }
+        </h2>
+
+        <p>
+
+            ${
+                method === "Cash on Delivery"
+                ? "Your order has been placed successfully with Cash on Delivery."
+                : "Your payment has been completed successfully."
+            }
+
+        </p>
+
+        <div class="order-id">
+
+            Order ID : ${orderID}
+
+        </div>
+
+        <p>
+
+            Payment Method :
+            <strong>${method}</strong>
+
+        </p>
+
+        <br>
+
+        <button
+            class="track-btn"
+            onclick="goToTracking()"
+        >
+
+            Track My Order
+
+        </button>
+
+    `;
+
+}
+
+
+
+/* ==========================================
+   GO TO TRACKING
+========================================== */
+
+function goToTracking(){
+
+    window.location.href =
+        "tracking.html";
+
+}
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Velora Coffee - Menu</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<header class="header">
+
+<div class="logo">
+
+<img src="images/logo.png">
+
+<h2>Velora Coffee</h2>
+
+</div>
+
+<nav>
+
+<a href="home.html">Home</a>
+
+<a href="menu.html">Menu</a>
+
+<a href="cart.html">
+
+<i class="fa-solid fa-cart-shopping"></i>
+
+Cart
+
+</a>
+
+</nav>
+
+</header>
+
+<section class="menu">
+
+<h1>Our Coffee Menu</h1>
+
+<div class="menu-container">
+    <!-- Americano -->
+<div class="card">
+<img src="images/americano.jpg">
+<h3>Americano</h3>
+<p>₹150</p>
+<button onclick="addCart('Americano',150,'images/americano.jpg')">Add to Cart</button>
+</div>
+
+<!-- Cappuccino -->
+<div class="card">
+<img src="images/cappuccino.jpg">
+<h3>Cappuccino</h3>
+<p>₹180</p>
+<button onclick="addCart('Cappuccino',180,'images/cappuccino.jpg')">Add to Cart</button>
+</div>
+
+<!-- Espresso -->
+<div class="card">
+<img src="images/espresso.jpg">
+<h3>Espresso</h3>
+<p>₹140</p>
+<button onclick="addCart('Espresso',140,'images/espresso.jpg')">Add to Cart</button>
+</div>
+
+<!-- Latte -->
+<div class="card">
+<img src="images/latte.jpg">
+<h3>Latte</h3>
+<p>₹190</p>
+<button onclick="addCart('Latte',190,'images/latte.jpg')">Add to Cart</button>
+</div>
+
+<!-- Mocha -->
+<div class="card">
+<img src="images/mocha.jpg">
+<h3>Mocha</h3>
+<p>₹210</p>
+<button onclick="addCart('Mocha',210,'images/mocha.jpg')">Add to Cart</button>
+</div>
+<!-- Macchiato -->
+<div class="card">
+    <img src="images/macchiato.jpg">
+    <h3>Macchiato</h3>
+    <p>₹220</p>
+    <button onclick="addCart('Macchiato',220,'images/macchiato.jpg')">
+        Add to Cart
+    </button>
+</div>
+
+<!-- Flat White -->
+<div class="card">
+    <img src="images/flatwhite.jpg">
+    <h3>Flat White</h3>
+    <p>₹200</p>
+    <button onclick="addCart('Flat White',200,'images/flatwhite.jpg')">
+        Add to Cart
+    </button>
+</div>
+
+<!-- Cold Coffee -->
+<div class="card">
+    <img src="images/coldcoffee.jpg">
+    <h3>Cold Coffee</h3>
+    <p>₹170</p>
+    <button onclick="addCart('Cold Coffee',170,'images/coldcoffee.jpg')">
+        Add to Cart
+    </button>
+</div>
+
+<!-- Hazelnut Coffee -->
+<div class="card">
+    <img src="images/hazelnut.jpg">
+    <h3>Hazelnut Coffee</h3>
+    <p>₹230</p>
+    <button onclick="addCart('Hazelnut Coffee',230,'images/hazelnut.jpg')">
+        Add to Cart
+    </button>
+</div>
+
+<!-- Irish Coffee -->
+<div class="card">
+    <img src="images/irishcoffee.jpg">
+    <h3>Irish Coffee</h3>
+    <p>₹250</p>
+    <button onclick="addCart('Irish Coffee',250,'images/irishcoffee.jpg')">
+        Add to Cart
+    </button>
+</div>
+
+</div>
+
+</section>
+
+<script>
+
+function addCart(name, price, image){
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    let item = cart.find(i => i.name === name);
+
+    if(item){
+        item.qty++;
+    }else{
+        cart.push({
+            name: name,
+            price: price,
+            image: image,
+            qty: 1
+        });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    // Directly go to Cart page
+    window.location.href = "cart.html";
+}
+
+</script>
+
+</body>
+</html>

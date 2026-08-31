@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Checkout - Velora Coffee</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<header class="header">
+
+<div class="logo">
+
+<img src="images/logo.png">
+
+<h2>Velora Coffee</h2>
+
+</div>
+
+<nav>
+
+<a href="home.html">Home</a>
+
+<a href="menu.html">Menu</a>
+
+<a href="cart.html">Cart</a>
+
+</nav>
+
+</header>
+
+<section class="checkout">
+
+<h1>Checkout</h1>
+
+<form id="checkoutForm">
+
+<input
+type="text"
+id="name"
+placeholder="Enter Your Name"
+required>
+
+<input
+type="tel"
+id="phone"
+placeholder="Enter Mobile Number"
+required>
+
+<textarea
+id="address"
+placeholder="Enter Delivery Address"
+required></textarea>
+
+<select id="delivery">
+
+<option>Normal Delivery</option>
+
+<option>Express Delivery</option>
+
+</select>
+
+<button type="submit">
+
+Proceed to Payment
+
+</button>
+</form>
+
+</section>
+
+<script>
+
+document.getElementById("checkoutForm").addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    let order = {
+
+        name: document.getElementById("name").value,
+
+        phone: document.getElementById("phone").value,
+
+        address: document.getElementById("address").value,
+
+        delivery: document.getElementById("delivery").value
+
+    };
+
+    localStorage.setItem("orderDetails", JSON.stringify(order));
+
+    window.location.href = "payment.html";
+
+});
+
+</script>
+
+</body>
+</html>

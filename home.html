@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Velora Coffee - Home</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+<body>
+
+<header class="header">
+
+    <div class="logo">
+        <img src="images/logo.png" alt="Logo">
+        <h2>Velora Coffee</h2>
+    </div>
+
+    <nav>
+        <a href="home.html">Home</a>
+        <a href="menu.html">Menu</a>
+        <a href="cart.html">
+            <i class="fa-solid fa-cart-shopping"></i> Cart
+        </a>
+    </nav>
+
+</header>
+
+<section class="hero">
+
+    <div class="hero-text">
+
+        <h1>Welcome To Vellora Coffee House...
+            <span id=""></span> ☕
+        </h1>
+
+        <p>
+            Freshly brewed coffee made with premium beans.
+            Order your favourite coffee online and enjoy
+            fast delivery at your doorstep.
+        </p>
+
+        <a href="menu.html" class="order-btn">
+            Order Now
+        </a>
+
+    </div>
+
+    <div class="hero-image">
+        <img src="images/banner.jpg" alt="Coffee Banner">
+    </div>
+
+</section>
+
+<section class="features">
+
+    <div class="feature-box">
+        <i class="fa-solid fa-mug-hot"></i>
+        <h3>Premium Coffee</h3>
+        <p>Freshly brewed every day.</p>
+    </div>
+
+    <div class="feature-box">
+        <i class="fa-solid fa-truck-fast"></i>
+        <h3>Fast Delivery</h3>
+        <p>Delivered within minutes.</p>
+    </div>
+
+    <div class="feature-box">
+        <i class="fa-solid fa-star"></i>
+        <h3>Top Rated</h3>
+        <p>Loved by coffee lovers.</p>
+    </div>
+
+</section>
+
+<section class="contact">
+
+<h2>Contact Us</h2>
+
+<p><i class="fa-solid fa-location-dot"></i>
+Velora Coffee, Villupuram, Tamil Nadu</p>
+
+<p><i class="fa-solid fa-phone"></i>
++91 9500904521</p>
+
+<p><i class="fa-solid fa-envelope"></i>
+vela2156@gmail.com</p>
+
+</section>
+
+<footer>
+
+<p>© 2026 Velora Coffee | All Rights Reserved.</p>
+
+</footer>
+
+<script>
+
+document.getElementById("customerName").innerHTML =
+localStorage.getItem("customerName");
+
+</script>
+
+</body>
+</html>
