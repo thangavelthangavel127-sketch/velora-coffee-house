@@ -55,6 +55,7 @@ type="tel"
 id="phone"
 placeholder="Enter Mobile Number"
 required>
+<span id="phoneError" style="color:red; font-size:14px; display:none;"></span>
 
 <textarea
 id="address"
@@ -84,11 +85,23 @@ document.getElementById("checkoutForm").addEventListener("submit", function(e){
 
     e.preventDefault();
 
+    const phoneValue = document.getElementById("phone").value.trim();
+    const phoneError = document.getElementById("phoneError");
+    const phonePattern = /^[0-9]{10}$/;
+
+    if (!phonePattern.test(phoneValue)) {
+        phoneError.textContent = "Please enter a valid 10-digit mobile number";
+        phoneError.style.display = "block";
+        return;
+    } else {
+        phoneError.style.display = "none";
+    }
+
     let order = {
 
         name: document.getElementById("name").value,
 
-        phone: document.getElementById("phone").value,
+        phone: phoneValue,
 
         address: document.getElementById("address").value,
 
