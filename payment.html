@@ -558,6 +558,10 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <script>
 
+const API = (location.hostname === "127.0.0.1" || location.hostname === "localhost")
+    ? "http://127.0.0.1:3000"
+    : "";
+
 
 /* ==========================================
    VARIABLES
@@ -1059,7 +1063,7 @@ function completeOrder(method){
     const token = localStorage.getItem("token");
 
     if (token) {
-        fetch("http://127.0.0.1:3000/api/orders", {
+        fetch(`${API}/api/orders`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

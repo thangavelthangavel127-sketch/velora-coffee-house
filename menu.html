@@ -54,7 +54,9 @@ Cart
 
 <script>
 
-const API = "http://127.0.0.1:3000";
+const API = (location.hostname === "127.0.0.1" || location.hostname === "localhost")
+    ? "http://127.0.0.1:3000"
+    : "";
 
 async function loadMenu() {
     const container = document.getElementById("menuContainer");

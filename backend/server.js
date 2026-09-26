@@ -2,19 +2,23 @@ const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const path = require("path");
 
 const db = require("./database");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 const JWT_SECRET = "velora_coffee_secret_key";
 
 app.use(cors());
 app.use(express.json());
 
+// Serve the frontend (html, css, js, images) from the parent folder
+app.use(express.static(path.join(__dirname, "..")));
+
 app.get("/", (req, res) => {
-    res.send("Velora Coffee Backend is Running!");
+    res.sendFile(path.join(__dirname, "..", "index.html"));
 });
 
 app.post("/api/register", async (req, res) => {

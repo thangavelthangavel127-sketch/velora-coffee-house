@@ -82,6 +82,10 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <script>
 
+const API = (location.hostname === "127.0.0.1" || location.hostname === "localhost")
+    ? "http://127.0.0.1:3000"
+    : "";
+
 document.getElementById("registerForm").addEventListener("submit", async function(e) {
 
     e.preventDefault();
@@ -106,7 +110,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
 
     try {
 
-        const response = await fetch("http://localhost:3000/api/register", {
+        const response = await fetch(`${API}/api/register`, {
 
             method: "POST",
 
