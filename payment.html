@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -998,6 +997,16 @@ function completeOrder(method){
             localStorage.getItem("orderDetails")
         ) || {};
 
+    let cart =
+        JSON.parse(
+            localStorage.getItem("cart")
+        ) || [];
+
+    let grandTotal = cart.reduce(
+        function(sum, item){ return sum + (item.price * item.qty); },
+        0
+    );
+
 
     /* Generate order ID */
 
@@ -1043,6 +1052,30 @@ function completeOrder(method){
         "orderDetails",
         JSON.stringify(order)
     );
+
+
+    /* Save order to backend database so admin can see it */
+
+    const token = localStorage.getItem("token");
+
+    if (token) {
+        fetch("http://127.0.0.1:3000/api/orders", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({
+                items: cart,
+                total_amount: grandTotal,
+                payment_method: method,
+                payment_status: order.paymentStatus,
+                address: order.address || ""
+            })
+        }).catch(function(err){
+            console.error("Could not save order to server:", err);
+        });
+    }
 
 
     /* Remove cart after successful order */

@@ -81,6 +81,12 @@ Proceed to Payment
 
 <script>
 
+// Require login before checkout
+if (!localStorage.getItem("token")) {
+    alert("Please login before placing an order.");
+    window.location.href = "login.html";
+}
+
 document.getElementById("checkoutForm").addEventListener("submit", function(e){
 
     e.preventDefault();

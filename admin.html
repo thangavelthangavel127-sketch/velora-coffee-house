@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - Velora Coffee</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+    body {
+        background: #f5f1ec;
+        font-family: Arial, sans-serif;
+        margin: 0;
+    }
+    .admin-header {
+        background: #3b2417;
+        color: #fff;
+        padding: 18px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .admin-header h1 {
+        font-size: 20px;
+        margin: 0;
+    }
+    .logout-btn {
+        background: #a0522d;
+        color: #fff;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    .tabs {
+        display: flex;
+        gap: 10px;
+        padding: 20px 30px 0;
+    }
+    .tab-btn {
+        padding: 10px 20px;
+        border: none;
+        background: #e4d9cc;
+        border-radius: 6px 6px 0 0;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    .tab-btn.active {
+        background: #a0522d;
+        color: #fff;
+    }
+    .tab-content {
+        display: none;
+        padding: 20px 30px;
+    }
+    .tab-content.active {
+        display: block;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    th, td {
+        padding: 10px 14px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+    }
+    th {
+        background: #3b2417;
+        color: #fff;
+    }
+    .form-box {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+        align-items: end;
+    }
+    .form-box input, .form-box select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .form-box button {
+        background: #a0522d;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    .small-btn {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 12px;
+        margin-right: 4px;
+    }
+    .edit-btn { background: #6b8e5a; color: #fff; }
+    .delete-btn { background: #c0392b; color: #fff; }
+    select.status-select {
+        padding: 5px;
+        border-radius: 5px;
+    }
+    #accessDenied {
+        text-align: center;
+        padding: 60px 20px;
+        display: none;
+    }
+    .view-btn {
+        background: #3b6ea5;
+        color: #fff;
+        border: none;
+        padding: 6px 14px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 12px;
+    }
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.6);
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+    .modal-overlay.show {
+        display: flex;
+    }
+    .modal-box {
+        background: #fff;
+        width: 90%;
+        max-width: 480px;
+        max-height: 80vh;
+        overflow-y: auto;
+        border-radius: 12px;
+        padding: 25px;
+    }
+    .modal-box h3 {
+        margin-top: 0;
+        color: #3b2417;
+    }
+    .modal-close {
+        float: right;
+        background: #c0392b;
+        color: #fff;
+        border: none;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    .order-item-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+    }
+    .order-item-row img {
+        width: 55px;
+        height: 55px;
+        object-fit: cover;
+        border-radius: 8px;
+        background: #eee;
+    }
+    .order-item-info h4 {
+        margin: 0 0 4px 0;
+        font-size: 15px;
+    }
+    .order-item-info p {
+        margin: 0;
+        font-size: 13px;
+        color: #555;
+    }
+</style>
+</head>
+<body>
+
+<div id="accessDenied">
+    <h2>Access Denied</h2>
+    <p>Please <a href="login.html">login</a> as an admin to view this page.</p>
+</div>
+
+<div id="adminPanel" style="display:none;">
+
+    <div class="admin-header">
+        <h1>☕ Velora Coffee — Admin Dashboard</h1>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('products')">Products</button>
+        <button class="tab-btn" onclick="showTab('orders')">Orders</button>
+    </div>
+
+    <!-- PRODUCTS TAB -->
+    <div id="products" class="tab-content active">
+
+        <div class="form-box">
+            <input type="hidden" id="productId">
+            <input type="text" id="pName" placeholder="Product name">
+            <input type="text" id="pCategory" placeholder="Category">
+            <input type="number" id="pPrice" placeholder="Price" step="0.01">
+            <input type="text" id="pImage" placeholder="Image filename (e.g. latte.jpg)">
+            <input type="text" id="pDescription" placeholder="Description">
+            <button onclick="saveProduct()">Save Product</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Image</th><th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="productsTableBody"></tbody>
+        </table>
+    </div>
+
+    <!-- ORDERS TAB -->
+    <div id="orders" class="tab-content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th><th>Customer</th><th>Email</th><th>Items</th><th>Amount</th><th>Payment</th><th>Status</th><th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="ordersTableBody"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- ORDER ITEMS MODAL -->
+<div class="modal-overlay" id="itemsModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeItemsModal()">×</button>
+        <h3 id="modalOrderTitle">Order Items</h3>
+        <div id="modalItemsList"></div>
+    </div>
+</div>
+
+<script>
+const API = "http://127.0.0.1:3000";
+const token = localStorage.getItem("token");
+const role = localStorage.getItem("userRole");
+
+if (!token || role !== "admin") {
+    document.getElementById("accessDenied").style.display = "block";
+} else {
+    document.getElementById("adminPanel").style.display = "block";
+    loadProducts();
+    loadOrders();
+}
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "login.html";
+}
+
+function showTab(tab) {
+    document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+    document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
+    document.getElementById(tab).classList.add("active");
+    event.target.classList.add("active");
+}
+
+// ---------- PRODUCTS ----------
+
+async function loadProducts() {
+    const res = await fetch(`${API}/api/products`);
+    const data = await res.json();
+    const body = document.getElementById("productsTableBody");
+    body.innerHTML = "";
+
+    if (data.success) {
+        data.products.forEach(p => {
+            body.innerHTML += `
+                <tr>
+                    <td>${p.id}</td>
+                    <td>${p.name}</td>
+                    <td>${p.category || ""}</td>
+                    <td>₹${p.price}</td>
+                    <td>${p.image || ""}</td>
+                    <td>
+                        <button class="small-btn edit-btn" onclick='editProduct(${JSON.stringify(p)})'>Edit</button>
+                        <button class="small-btn delete-btn" onclick="deleteProduct(${p.id})">Delete</button>
+                    </td>
+                </tr>`;
+        });
+    }
+}
+
+function editProduct(p) {
+    document.getElementById("productId").value = p.id;
+    document.getElementById("pName").value = p.name;
+    document.getElementById("pCategory").value = p.category || "";
+    document.getElementById("pPrice").value = p.price;
+    document.getElementById("pImage").value = p.image || "";
+    document.getElementById("pDescription").value = p.description || "";
+}
+
+async function saveProduct() {
+    const id = document.getElementById("productId").value;
+    const body = {
+        name: document.getElementById("pName").value.trim(),
+        category: document.getElementById("pCategory").value.trim(),
+        price: parseFloat(document.getElementById("pPrice").value),
+        image: document.getElementById("pImage").value.trim(),
+        description: document.getElementById("pDescription").value.trim()
+    };
+
+    if (!body.name || !body.price) {
+        alert("Name and price are required");
+        return;
+    }
+
+    const url = id ? `${API}/api/admin/products/${id}` : `${API}/api/admin/products`;
+    const method = id ? "PUT" : "POST";
+
+    const res = await fetch(url, {
+        method,
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify(body)
+    });
+
+    const data = await res.json();
+    if (data.success) {
+        clearProductForm();
+        loadProducts();
+    } else {
+        alert(data.message);
+    }
+}
+
+function clearProductForm() {
+    document.getElementById("productId").value = "";
+    document.getElementById("pName").value = "";
+    document.getElementById("pCategory").value = "";
+    document.getElementById("pPrice").value = "";
+    document.getElementById("pImage").value = "";
+    document.getElementById("pDescription").value = "";
+}
+
+async function deleteProduct(id) {
+    if (!confirm("Delete this product?")) return;
+
+    const res = await fetch(`${API}/api/admin/products/${id}`, {
+        method: "DELETE",
+        headers: { "Authorization": "Bearer " + token }
+    });
+
+    const data = await res.json();
+    if (data.success) loadProducts();
+    else alert(data.message);
+}
+
+// ---------- ORDERS ----------
+
+async function loadOrders() {
+    const res = await fetch(`${API}/api/admin/orders`, {
+        headers: { "Authorization": "Bearer " + token }
+    });
+    const data = await res.json();
+    const body = document.getElementById("ordersTableBody");
+    body.innerHTML = "";
+
+    if (data.success) {
+        const statuses = ["Order Placed", "Preparing", "Ready", "Delivered", "Cancelled"];
+
+        data.orders.forEach(o => {
+            const options = statuses.map(s =>
+                `<option value="${s}" ${o.status === s ? "selected" : ""}>${s}</option>`
+            ).join("");
+
+            let itemsList = "";
+            try {
+                const items = JSON.parse(o.items_json || "[]");
+                itemsList = items.map(i => `${i.name} x${i.qty}`).join(", ");
+            } catch (e) {
+                itemsList = "-";
+            }
+
+            body.innerHTML += `
+                <tr>
+                    <td>${o.id}</td>
+                    <td>${o.customer_name}</td>
+                    <td>${o.customer_email}</td>
+                    <td><button class="view-btn" onclick='viewOrderItems(${o.id}, ${o.items_json || "[]"})'>View Items</button></td>
+                    <td>₹${o.total_amount}</td>
+                    <td>${o.payment_method || "-"} (${o.payment_status})</td>
+                    <td>
+                        <select class="status-select" onchange="updateStatus(${o.id}, this.value)">
+                            ${options}
+                        </select>
+                    </td>
+                    <td>${new Date(o.created_at).toLocaleString()}</td>
+                </tr>`;
+        });
+    }
+}
+
+function viewOrderItems(orderId, items) {
+    document.getElementById("modalOrderTitle").textContent = "Order #" + orderId + " — Items";
+
+    let html = "";
+    if (!items || !items.length) {
+        html = "<p>No item details available.</p>";
+    } else {
+        items.forEach(i => {
+            html += `
+                <div class="order-item-row">
+                    <img src="${i.image || ''}" onerror="this.style.display='none'">
+                    <div class="order-item-info">
+                        <h4>${i.name}</h4>
+                        <p>Qty: ${i.qty} &nbsp;•&nbsp; Price: ₹${i.price} &nbsp;•&nbsp; Subtotal: ₹${i.price * i.qty}</p>
+                    </div>
+                </div>`;
+        });
+    }
+
+    document.getElementById("modalItemsList").innerHTML = html;
+    document.getElementById("itemsModal").classList.add("show");
+}
+
+function closeItemsModal() {
+    document.getElementById("itemsModal").classList.remove("show");
+}
+
+async function updateStatus(orderId, status) {
+    const res = await fetch(`${API}/api/admin/orders/${orderId}/status`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({ status })
+    });
+
+    const data = await res.json();
+    if (!data.success) alert(data.message);
+}
+</script>
+
+</body>
+</html>

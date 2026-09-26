@@ -10,6 +10,28 @@
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+<style>
+.role-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+}
+.role-tab {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    background: #f0f0f0;
+    font-weight: bold;
+    transition: 0.2s;
+}
+.role-tab.active {
+    background: #6f4e37;
+    color: #fff;
+}
+</style>
 </head>
 <body>
 
@@ -23,21 +45,48 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
         <p>Sign in to continue your coffee journey ☕</p>
 
+        <div class="role-tabs">
+            <div class="role-tab active" id="userTab" onclick="selectRole('user')">User Login</div>
+            <div class="role-tab" id="adminTab" onclick="selectRole('admin')">Admin Login</div>
+        </div>
+
         <form id="loginForm">
 
+            <!-- Name -->
             <div class="input-box">
                 <i class="fa-solid fa-user"></i>
-                <input type="text" id="name" placeholder="Enter Your Name" required>
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Enter Your Name"
+                    required>
             </div>
 
+            <!-- Email -->
             <div class="input-box">
                 <i class="fa-solid fa-envelope"></i>
-                <input type="email" id="email" placeholder="Enter Email" required>
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter Email"
+                    required>
+            </div>
+
+            <!-- Password -->
+            <div class="input-box">
+                <i class="fa-solid fa-lock"></i>
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter Password"
+                    required>
             </div>
 
             <button type="submit" class="login-btn">
                 Login
             </button>
+
+            <p id="loginMessage"></p>
 
         </form>
 
@@ -47,17 +96,95 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <script>
 
-document.getElementById("loginForm").addEventListener("submit",function(e){
+let selectedRole = "user";
 
-e.preventDefault();
+function selectRole(role) {
+    selectedRole = role;
+    document.getElementById("userTab").classList.toggle("active", role === "user");
+    document.getElementById("adminTab").classList.toggle("active", role === "admin");
+}
 
-let name=document.getElementById("name").value;
-let email=document.getElementById("email").value;
+document.getElementById("loginForm").addEventListener("submit", async function(e) {
 
-localStorage.setItem("customerName",name);
-localStorage.setItem("customerEmail",email);
+    e.preventDefault();
 
-window.location.href="home.html";
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    const message = document.getElementById("loginMessage");
+
+    message.textContent = "Logging in...";
+
+    try {
+
+        const response = await fetch("http://127.0.0.1:3000/api/login", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+
+            // Check that the account role matches the selected tab
+            if (selectedRole === "admin" && data.user.role !== "admin") {
+                message.style.color = "red";
+                message.textContent = "This is not an admin account. Please use User Login.";
+                return;
+            }
+
+            if (selectedRole === "user" && data.user.role === "admin") {
+                message.style.color = "red";
+                message.textContent = "This is an admin account. Please use Admin Login.";
+                return;
+            }
+
+            // Save login information
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("customerName", data.user.name);
+            localStorage.setItem("customerEmail", data.user.email);
+            localStorage.setItem("userId", data.user.id);
+            localStorage.setItem("userRole", data.user.role);
+
+            message.style.color = "green";
+            message.textContent = "Login successful!";
+
+            // Go to admin dashboard or home page based on role
+            setTimeout(function() {
+                if (data.user.role === "admin") {
+                    window.location.href = "admin.html";
+                } else {
+                    window.location.href = "home.html";
+                }
+            }, 500);
+
+        } else {
+
+            message.style.color = "red";
+            message.textContent = data.message;
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        message.style.color = "red";
+        message.textContent =
+            "Cannot connect to server. Please start the backend.";
+
+    }
 
 });
 
